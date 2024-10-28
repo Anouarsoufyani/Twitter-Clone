@@ -57,7 +57,12 @@ export const signup = async (req, res) => {
                 _id: newUser._id,
                 fullName: newUser.fullName,
                 username: newUser.username,
-                email: newUser.email});
+                email: newUser.email,
+                followers: newUser.followers,
+                following: newUser.following,
+                profilePic: newUser.profilePic,
+                coverPic: newUser.coverPic
+            });
         } else {
             console.log('error', error.message)
             res.status(400).json({success: false, error: 'Invalid user data'});
@@ -68,19 +73,63 @@ export const signup = async (req, res) => {
     }
 }
 
-export const signin = async (req, res) => {
-    res.json({
-        message: 'Signin'
-    })
-}
-
 export const login = async (req, res) => {
-    res.json({
-        message: 'login'
-    })
+    try {
+
+        const {username, password} = req.body;
+
+        // validation
+        if (!username || !password) {
+            return res.status(400).json({success: false, error: 'All fields are required'})
+        }
+
+        
+
+        const user = await User.findOne({username});
+        const isPasswordValid = await bcrypt.compare(password, user?.password || '');
+
+        if (user && isPasswordValid) {
+            generateTokenAndSetCookie(user._id, res);
+            res.status(200).json({
+                success: true,
+                message: 'User logged in successfully',
+                _id: user._id,
+                fullName: user.fullName,
+                username: user.username,
+                email: user.email,
+                followers: user.followers,
+                following: user.following,
+                profilePic: user.profilePic,
+                coverPic: user.coverPic
+            });
+        }else {
+            console.log('error', error.message)
+            res.status(400).json({success: false, error: 'Invalid username or password'});
+        }
+
+    } catch (error) {
+        console.log("Error logging in", error.message);
+        return res.status(400).json({success: false, error: "Invalid credentials"});
+    }
 }
 export const logout = async (req, res) => {
-    res.json({
-        message: 'logout'
-    })
+    try {
+        res.cookie('jwt', '', {maxAge: 0});
+        res.status(200).json({success: true, message: 'Logged out successfully'});
+    } catch (error) {
+        console.log("Error logging out", error.message);
+        return res.status(400).json({success: false, error: "Logout failed"});
+    }
+}
+
+export const getAuthenticatedUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password');
+        res.status(200).json({
+            success: true,
+            data : user
+        })
+    } catch (error) {
+        
+    }
 }
