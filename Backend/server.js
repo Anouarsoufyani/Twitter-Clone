@@ -1,5 +1,6 @@
 import express from 'express'
 import authRoutes from './Routes/AuthRoutes.js'
+import userRoutes from './Routes/UserRoutes.js'
 
 import dotenv from 'dotenv'
 import connectDB from './DB/Connect.js'
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true })); // for parsing application/x-ww
 app.use(cookieParser()); // for parsing cookie headers
 
 app.use('/api/auth', authRoutes )
+app.use('/api/user', userRoutes )
 
 app.listen(PORT, () => {
     connectDB();
