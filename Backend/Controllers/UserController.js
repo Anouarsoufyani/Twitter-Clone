@@ -1,4 +1,3 @@
-import { generateTokenAndSetCookie } from '../Lib/utils/generateToken.js';
 import { v2 as cloudinary } from 'cloudinary';
 
 import User from '../Models/User.js'
@@ -143,13 +142,13 @@ export const updateProfile = async (req, res) => {
         if(profilePic) {
             if(profile.profilePic) {
                 await cloudinary.uploader.destroy(profile.profilePic.split('/').pop().split('.')[0]);
-                console.log(path.basename(profile.profilePic));
-                console.log(profile.profilePic.split('/').pop().split('.')[0]);
-                console.log(profile.profilePic.split('/').pop());
+                // console.log(path.basename(profile.profilePic));
+                // console.log(profile.profilePic.split('/').pop().split('.')[0]);
+                // console.log(profile.profilePic.split('/').pop());
             }
             const uploadResult = await cloudinary.uploader.upload(profilePic);
             profile.profilePic = uploadResult.secure_url;
-            console.log(uploadResult, uploadResult.secure_url);
+            // console.log(uploadResult, uploadResult.secure_url);
         }
         if(coverPic) {
             if(profile.coverPic) {

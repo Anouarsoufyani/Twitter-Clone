@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser'
 
 import authRoutes from './Routes/AuthRoutes.js'
 import userRoutes from './Routes/UserRoutes.js'
+import postRoutes from './Routes/PostRoutes.js'
 
 import connectDB from './DB/Connect.js'
 
@@ -23,8 +24,9 @@ app.use(express.json()); // for parsing application/json, to parse request body
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser()); // for parsing cookie headers
 
-app.use('/api/auth', authRoutes )
-app.use('/api/user', userRoutes )
+app.use('/api/auth', authRoutes );
+app.use('/api/user', userRoutes );
+app.use('/api/post', postRoutes );
 
 app.listen(PORT, () => {
     connectDB();
