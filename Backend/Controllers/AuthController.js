@@ -3,43 +3,39 @@ import User from '../Models/User.js'
 import bcrypt from 'bcryptjs'
 
 export const signup = async (req, res) => {
+
+    // validation for req.body
+    const {username, email, password, fullName} = req.body;
+    // Regular expression for email validation (i dont understand but ok)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+
     try {
-
-        // validation for req.body
-        const {username, email, password, fullName} = req.body;
-
-        // Regular expression for email validation (i dont understand but ok)
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
-
         // validation for email
         if (!emailRegex.test(email)) {
             return res.status(400).json({success: false, error: 'Invalid email address'})
         }
-
         // checking if username already exists
         const existingUser = await User.findOne({username});
         if (existingUser) {
             return res.status(400).json({success: false, error: 'Username already taken'})
         }
-
         // checking if email already exists
         const existingEmail = await User.findOne({email});
         if (existingEmail) {
             return res.status(400).json({success: false, error: 'Email already taken'})
         }
-
+        // checking if password is at least 6 characters
         if(password.length < 6) {
             return res.status(400).json({success: false, error: 'Password must be at least 6 characters'})
         }
-
         //hash password
         // example : pass os 123456 -> it will be something like wuijfowebf327423gr784vbf47
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // if (!username || !email || !password || !fullName) {
-        //     return res.status(400).json({success: false, error: 'All fields are required'})
-        // }
+        if (!username || !email || !password || !fullName) {
+            return res.status(400).json({success: false, error: 'All fields are required'})
+        }
 
         const newUser = new User({
             username,
@@ -51,7 +47,7 @@ export const signup = async (req, res) => {
         if (newUser) {
             generateTokenAndSetCookie(newUser._id, res);
             await newUser.save();
-            res.status(201).json({
+            return res.status(201).json({
                 success: true,
                 message: 'User created successfully', 
                 _id: newUser._id,
@@ -65,19 +61,19 @@ export const signup = async (req, res) => {
             });
         } else {
             console.log('error', error.message)
-            res.status(400).json({success: false, error: 'Invalid user data'});
+            return res.status(400).json({success: false, error: 'Invalid user data'});
         }
 
     } catch (error) {
-        res.status(400).json({success: false, message: error.message});
+        return res.status(400).json({success: false, message: error.message});
     }
 }
 
 export const login = async (req, res) => {
+
+    const {username, password} = req.body;
+
     try {
-
-        const {username, password} = req.body;
-
         // validation
         if (!username || !password) {
             return res.status(400).json({success: false, error: 'All fields are required'})
@@ -104,7 +100,7 @@ export const login = async (req, res) => {
             });
         }else {
             console.log('error', error.message)
-            res.status(400).json({success: false, error: 'Invalid username or password'});
+            return res.status(400).json({success: false, error: 'Invalid username or password'});
         }
 
     } catch (error) {
@@ -115,7 +111,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         res.cookie('jwt', '', {maxAge: 0});
-        res.status(200).json({success: true, message: 'Logged out successfully'});
+        return res.status(200).json({success: true, message: 'Logged out successfully'});
     } catch (error) {
         console.log("Error logging out", error.message);
         return res.status(400).json({success: false, error: "Logout failed"});
@@ -125,11 +121,11 @@ export const logout = async (req, res) => {
 export const getMe = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select('-password');
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             data : user
         })
     } catch (error) {
-        
+        return res.status(500).json({success: false, error: 'Not connected'});
     }
 }
