@@ -4,35 +4,6 @@ import Post from '../Models/Post.js'
 import User from '../Models/User.js';
 import Notification from '../Models/Notification.js';
 
-export  const getFollowingPosts = async (req, res) => {
-    const userId = req.user.id;
-    console.log(userId);
-
-    try {
-        console.log(userId);
-
-        const user = await User.findById(userId);
-        console.log(user);
-        if (!user) {
-            return res.status(404).json({ success: false, error: 'User not found TEST' });
-        }
-
-        const following = user.following;
-
-        const feedPosts = await Post.find({ postedBy: { $in: following } })
-        .populate({
-            path: 'postedBy',
-            select: 'username profilePic fullName',
-        }).populate({
-            path: 'comments.postedBy',
-            select: 'username profilePic fullName'
-        });
-        return res.status(200).json({ success: true, data: feedPosts });
-    } catch (error) {
-        return res.status(500).json({ success: false, error: "Errorororor" });
-    }
-}
-
 export const createPost = async (req, res) => {
 
     const { caption } = req.body;
@@ -185,18 +156,15 @@ export const deletePost = async (req, res) => {
 
 export const getAllPosts = async (req, res) => {
     try {
-        console.log('getAllPosts');
         // const posts = await Post.find({}).populate('postedBy', '-password');
-        // const posts = await Post.find({createdAt: -1}).populate('postedBy', 'username profilePic fullName');
+        // const posts = await Post.find({}).populate('postedBy', 'username profilePic fullName');
         const posts = await Post.find({}).populate({
             path: 'postedBy',
-            select: 'username profilePic fullName',
+            select: 'username profilePic fullName'
         }).populate({
             path: 'comments.postedBy',
             select: 'username profilePic fullName'
         });
-
-        console.log(posts);
 
         // if (!posts) {
         //     return res.status(404).json({ success: false, error: 'Posts not found' });
@@ -206,24 +174,6 @@ export const getAllPosts = async (req, res) => {
             return res.status(200).json([]);
         }
 
-        return res.status(200).json({ success: true, data: posts });
-    } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
-    }
-}
-
-export const getUserPosts = async (req, res) => {
-    const { username } = req.params;
-
-    try {
-        const user = await User.findOne({ username }).select('_id');
-        if (!user) {
-            return res.status(404).json({ success: false, error: 'User not found' });
-        }
-        const posts = await Post.find({ postedBy: user._id });
-        if (!posts) {
-            return res.status(404).json({ success: false, error: 'Posts not found' });
-        }
         return res.status(200).json({ success: true, data: posts });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
@@ -268,3 +218,45 @@ export const getUserLikedPosts = async (req, res) => {
     }
 }
 
+export  const getFollowingPosts = async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found TEST' });
+        }
+
+        const following = user.following;
+
+        const feedPosts = await Post.find({ postedBy: { $in: following } })
+        .populate({
+            path: 'postedBy',
+            select: 'username profilePic fullName',
+        }).populate({
+            path: 'comments.postedBy',
+            select: 'username profilePic fullName'
+        });
+        return res.status(200).json({ success: true, data: feedPosts });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: "Errorororor" });
+    }
+}
+
+export const getUserPosts = async (req, res) => {
+    try {
+        const { username } = req.params;
+        const user = await User.findOne({ username }).select('_id');
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+        const posts = await Post.find({ postedBy: user._id });
+        if (!posts) {
+            return res.status(404).json({ success: false, error: 'Posts not found' });
+        }
+        return res.status(200).json({ success: true, data: posts });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+}
