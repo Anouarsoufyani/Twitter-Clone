@@ -1,5 +1,4 @@
 import { v2 as cloudinary } from 'cloudinary';
-
 import Post from '../Models/Post.js'
 import User from '../Models/User.js';
 import Notification from '../Models/Notification.js';

@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import authRoutes from './Routes/AuthRoutes.js'
 import userRoutes from './Routes/UserRoutes.js'
 import postRoutes from './Routes/PostRoutes.js'
+import notificationRoutes from './Routes/NotificationRoutes.js'
 
 import connectDB from './DB/Connect.js'
 
@@ -27,6 +28,7 @@ app.use(cookieParser()); // for parsing cookie headers
 app.use('/api/auth', authRoutes );
 app.use('/api/user', userRoutes );
 app.use('/api/post', postRoutes );
+app.use('/api/notifications', notificationRoutes );
 
 app.listen(PORT, () => {
     connectDB();
