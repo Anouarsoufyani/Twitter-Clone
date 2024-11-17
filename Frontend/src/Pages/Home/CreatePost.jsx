@@ -2,23 +2,57 @@ import { CiImageOn } from "react-icons/ci";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { useRef, useState } from "react";
 import { IoCloseSharp } from "react-icons/io5";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const CreatePost = () => {
-    const [text, setText] = useState("");
+    const [caption, setCaption] = useState("");
     const [img, setImg] = useState(null);
+
+    const queryClient = useQueryClient();
+    const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+
+    const { mutate: createPost, isPending, isError } = useMutation({
+        mutationFn: async ({ caption, img }) => {
+            const res = await fetch("/api/post/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ caption, img }),
+            });
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error || "Something went wrong");
+            }
+
+            return data;
+        },
+        onSuccess: () => {
+            setCaption("");
+            setImg(null);
+            toast.success("Post created successfully");
+            queryClient.invalidateQueries({ queryKey: ["posts"] });
+        },
+        onError: (error) => {
+            // Gérer l'erreur
+            toast.error(error.message || "Error creating post");
+        }
+    });
+
+    console.log("test", isPending, isError);
+
 
     const imgRef = useRef(null);
 
-    const isPending = false;
-    const isError = false;
 
     const data = {
-        profileImg: "/avatars/boy1.png",
+        profileImg: authUser?.profileImg,
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert("Post created successfully");
+        createPost({ caption, img });
     };
 
     const handleImgChange = (e) => {
@@ -33,7 +67,7 @@ const CreatePost = () => {
     };
 
     return (
-        <div className='flex p-4 items-start gap-4 border-b border-gray-700'>
+        <div className='flex p-4 items-start gap-4 border-b border-gray-700' >
             <div className='avatar'>
                 <div className='w-8 rounded-full'>
                     <img src={data.profileImg || "/avatar-placeholder.png"} />
@@ -43,8 +77,8 @@ const CreatePost = () => {
                 <textarea
                     className='textarea w-full p-0 text-lg resize-none border-none focus:outline-none  border-gray-800'
                     placeholder='What is happening?!'
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
+                    value={caption}
+                    onChange={(e) => setCaption(e.target.value)}
                 />
                 {img && (
                     <div className='relative w-72 mx-auto'>
@@ -72,9 +106,8 @@ const CreatePost = () => {
                         {isPending ? "Posting..." : "Post"}
                     </button>
                 </div>
-                {isError && <div className='text-red-500'>Something went wrong</div>}
             </form>
-        </div>
+        </div >
     );
 };
 export default CreatePost;
