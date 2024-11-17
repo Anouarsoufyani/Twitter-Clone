@@ -173,7 +173,7 @@ export const getAllPosts = async (req, res) => {
             return res.status(200).json([]);
         }
 
-        return res.status(200).json({ success: true, data: posts });
+        return res.status(200).json({  posts });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }

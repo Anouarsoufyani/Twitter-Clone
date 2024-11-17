@@ -105,7 +105,7 @@ export const login = async (req, res) => {
 
     } catch (error) {
         console.log("Error logging in", error.message);
-        return res.status(400).json({success: false, error: "Invalid credentials"});
+        return res.status(400).json({success: false, error: "Invalid username or password"});
     }
 }
 export const logout = async (req, res) => {
