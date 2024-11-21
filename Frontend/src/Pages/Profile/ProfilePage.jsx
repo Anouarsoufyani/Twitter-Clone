@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import Posts from "../../Components/common/Posts";
 import ProfileHeaderSkeleton from "../../components/skeletons/ProfileHeaderSkeleton";
@@ -25,19 +25,26 @@ const ProfilePage = () => {
     const coverImgRef = useRef(null);
     const profileImgRef = useRef(null);
 
-    const isMyProfile = true;
 
-    const user = {
-        _id: "1",
-        fullName: "John Doe",
-        username: "johndoe",
-        profileImg: "/avatars/boy2.png",
-        coverImg: "/cover.png",
-        bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-        link: "https://youtube.com/@asaprogrammer_",
-        following: ["1", "2", "3"],
-        followers: ["1", "2", "3"],
-    };
+    const { username } = useParams();
+
+    const { data: user } = useQuery({
+        queryKey: ['user', username],
+        queryFn: async () => {
+            const res = await fetch(`/api/user/profile/${username}`);
+            console.log("username", username);
+
+            const data = await res.json();
+            console.log('user', data);
+
+            return data.data;
+        }
+    })
+
+    const isMyProfile = (user?.username === authUser?.username);
+    console.log("isMyProfile", isMyProfile);
+
+
 
     const handleImgChange = (e, state) => {
         const file = e.target.files[0];
@@ -136,13 +143,13 @@ const ProfilePage = () => {
 
                             <div className='flex flex-col gap-4 mt-14 px-4'>
                                 <div className='flex flex-col'>
-                                    <span className='font-bold text-lg'>{authUser?.fullName}</span>
-                                    <span className='text-sm text-slate-500'>@{authUser?.username}</span>
-                                    <span className='text-sm my-1'>{authUser?.bio}</span>
+                                    <span className='font-bold text-lg'>{user?.fullName}</span>
+                                    <span className='text-sm text-slate-500'>@{user?.username}</span>
+                                    <span className='text-sm my-1'>{user?.bio}</span>
                                 </div>
 
                                 <div className='flex gap-2 flex-wrap'>
-                                    {authUser?.link && (
+                                    {user?.link && (
                                         <div className='flex gap-1 items-center '>
                                             <>
                                                 <FaLink className='w-3 h-3 text-slate-500' />
@@ -164,11 +171,11 @@ const ProfilePage = () => {
                                 </div>
                                 <div className='flex gap-2'>
                                     <div className='flex gap-1 items-center'>
-                                        <span className='font-bold text-xs'>{authUser?.following.length}</span>
+                                        <span className='font-bold text-xs'>{user?.following?.length}</span>
                                         <span className='text-slate-500 text-xs'>Following</span>
                                     </div>
                                     <div className='flex gap-1 items-center'>
-                                        <span className='font-bold text-xs'>{authUser?.followers.length}</span>
+                                        <span className='font-bold text-xs'>{user?.followers?.length}</span>
                                         <span className='text-slate-500 text-xs'>Followers</span>
                                     </div>
                                 </div>

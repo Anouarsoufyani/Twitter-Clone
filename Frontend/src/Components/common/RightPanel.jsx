@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import RightPanelSkeleton from "../skeletons/RightPanelSkeleton.jsx";
 import { USERS_FOR_RIGHT_PANEL } from "../../utils/db/dummy";
 import { useQuery } from "@tanstack/react-query";
+import useFollow from "../../hooks/useFollow.jsx";
 
 const RightPanel = () => {
 
@@ -13,7 +14,6 @@ const RightPanel = () => {
 
                 // Récupérer le texte brut avant de parser JSON
                 const data = await res.json();
-                console.log('Raw response:', data);
 
 
                 return data.data || [];
@@ -24,9 +24,10 @@ const RightPanel = () => {
         }
     })
 
-    console.log('suggestedUsers', suggestedUsers);
 
-    if (suggestedUsers.data?.length === 0) {
+    const { followUnfollow, isPending } = useFollow();
+
+    if (suggestedUsers?.data?.length === 0) {
         return (
             <div className="md:w-64 w-0"></div>
         )
@@ -70,9 +71,12 @@ const RightPanel = () => {
                                 <div>
                                     <button
                                         className='btn bg-white text-black hover:bg-white hover:opacity-90 rounded-full btn-sm'
-                                        onClick={(e) => e.preventDefault()}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            followUnfollow(user._id);
+                                        }}
                                     >
-                                        Follow
+                                        {isPending ? "Following" : "Follow"}
                                     </button>
                                 </div>
                             </Link>
