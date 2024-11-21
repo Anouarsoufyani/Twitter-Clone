@@ -7,19 +7,19 @@ import toast from "react-hot-toast";
 
 const CreatePost = () => {
     const [caption, setCaption] = useState("");
-    const [img, setImg] = useState(null);
+    const [image, setImage] = useState(null);
 
     const queryClient = useQueryClient();
     const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
     const { mutate: createPost, isPending, isError } = useMutation({
-        mutationFn: async ({ caption, img }) => {
+        mutationFn: async ({ caption, image }) => {
             const res = await fetch("/api/post/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ caption, img }),
+                body: JSON.stringify({ caption, image }),
             });
             const data = await res.json();
             if (!res.ok) {
@@ -30,7 +30,7 @@ const CreatePost = () => {
         },
         onSuccess: () => {
             setCaption("");
-            setImg(null);
+            setImage(null);
             toast.success("Post created successfully");
             queryClient.invalidateQueries({ queryKey: ["posts"] });
         },
@@ -47,12 +47,12 @@ const CreatePost = () => {
 
 
     const data = {
-        profileImg: authUser?.profileImg,
+        profileImg: authUser?.profilePic,
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        createPost({ caption, img });
+        createPost({ caption, image });
     };
 
     const handleImgChange = (e) => {
@@ -60,7 +60,7 @@ const CreatePost = () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImg(reader.result);
+                setImage(reader.result);
             };
             reader.readAsDataURL(file);
         }
@@ -80,16 +80,16 @@ const CreatePost = () => {
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
                 />
-                {img && (
+                {image && (
                     <div className='relative w-72 mx-auto'>
                         <IoCloseSharp
                             className='absolute top-0 right-0 text-white bg-gray-800 rounded-full w-5 h-5 cursor-pointer'
                             onClick={() => {
-                                setImg(null);
+                                setImage(null);
                                 imgRef.current.value = null;
                             }}
                         />
-                        <img src={img} className='w-full mx-auto h-72 object-contain rounded' />
+                        <img src={image} className='w-full mx-auto h-72 object-contain rounded' />
                     </div>
                 )}
 
