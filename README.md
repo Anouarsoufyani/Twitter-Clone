@@ -4,6 +4,10 @@
 
 Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage du développement fullstack. L'objectif est de mettre en pratique et approfondir mes compétences avec les technologies modernes de développement web.
 
+### Lien du projet deployé
+
+https://twitter-clone-3-x2u5.onrender.com/
+
 ## 🚀 Technologies Utilisées
 
 ### Frontend
