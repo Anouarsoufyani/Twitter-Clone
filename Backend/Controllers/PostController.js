@@ -221,7 +221,7 @@ export const getUserLikedPosts = async (req, res) => {
         if (!posts) {
             return res.status(404).json({ success: false, error: 'Posts not found' });
         }
-        return res.status(200).json({ success: true, data: posts });
+        return res.status(200).json({ success: true, posts: posts });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
@@ -264,7 +264,7 @@ export const getUserPosts = async (req, res) => {
         if (!posts) {
             return res.status(404).json({ success: false, error: 'Posts not found' });
         }
-        return res.status(200).json({ success: true, data: posts });
+        return res.status(200).json({ success: true, posts: posts });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
