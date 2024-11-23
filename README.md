@@ -37,6 +37,7 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 - Commentaires
 - Like et follow
 - Notifications
+- Support des médias dans les tweets
 
 ## 🛠 Installation et Configuration
 
@@ -49,7 +50,7 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 
 1. Cloner le repository
 ```bash
-git clone https://github.com/votre-username/twitter-clone.git
+git clone https://github.com/Anouarsoufyani/Twitter-Clone.git
 cd twitter-clone
 ```
 
@@ -71,38 +72,25 @@ npm install
 4. Lancer l'application
 ```bash
 # Démarrer le backend
-cd server
 npm run dev
 
 # Dans un autre terminal, démarrer le frontend
-cd client
 npm start
 ```
-
-## 🧪 Tests
-
-### Backend
-- Framework de test : Jest
-- Couverture des tests : API, modèles, authentification
-
-### Frontend
-- React Testing Library
-- Tests de composants et d'intégration
 
 ## 🚧 Roadmap et Améliorations Futures
 
 - [ ] Système de hashtags
 - [ ] Authentification OAuth
-- [ ] Mode sombre
-- [ ] Support des médias dans les tweets
-- [ ] Déploiement sur une plateforme cloud
+- [ ] Mode sombre/clair
+- [ ] Messagerie temps réel
+- [ ] Feed personalisé
 
 ## 📚 Ressources d'Apprentissage
 
 - Documentation React
-- Tutoriels Node.js
-- Cours Udemy sur le développement fullstack
 - Documentation MongoDB
+- https://www.youtube.com/watch?v=MDZC8VDZnV8
 
 ## 🤝 Contribution
 
