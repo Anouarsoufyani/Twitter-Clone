@@ -11,16 +11,15 @@ import { FaArrowLeft } from "react-icons/fa6";
 import { IoCalendarOutline } from "react-icons/io5";
 import { FaLink } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatMemberSinceDate } from "../../utils/date";
 import useFollow from "../../hooks/useFollow";
-import toast from "react-hot-toast";
+import useUpdateProfile from "../../hooks/useUpdateProfile";
 
 const ProfilePage = () => {
 
     const { data: authUser, isLoading } = useQuery({ queryKey: ["authUser"] })
 
-    const queryClient = useQueryClient();
 
 
     const [coverImg, setCoverImg] = useState(null);
@@ -49,36 +48,7 @@ const ProfilePage = () => {
     })
 
 
-    const { mutate: updateProfile, isPending: isUpdatingProfile } = useMutation({
-        mutationFn: async () => {
-            const res = await fetch(`/api/user/update`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    coverPic: coverImg,
-                    profilePic: profileImg,
-                }),
-            });
-            const data = await res.json();
-            if (!res.ok) {
-                throw new Error(data.error || "Something went wrong");
-            }
-            console.log("profile updated", data);
-            return data.data;
-        },
-        onSuccess: () => {
-            toast.success('Profile updated successfully');
-            Promise.all([
-                queryClient.invalidateQueries({ queryKey: ["userProfile"] }),
-                queryClient.invalidateQueries({ queryKey: ["authUser"] }),
-            ])
-        },
-        onError: (err) => {
-            toast.error(err.message);
-        },
-    })
+    const { updateProfile, isUpdatingProfile } = useUpdateProfile();
 
     const isFollowing = authUser?.following?.includes(user?._id);
 
@@ -200,7 +170,14 @@ const ProfilePage = () => {
                                 {(coverImg || profileImg) && (
                                     <button
                                         className='btn btn-primary rounded-full btn-sm text-white px-4 ml-2'
-                                        onClick={() => updateProfile()}
+                                        onClick={async () => {
+                                            await updateProfile({
+                                                coverPic: coverImg,
+                                                profilePic: profileImg
+                                            });
+                                            setCoverImg(null);
+                                            setProfileImg(null);
+                                        }}
                                     >
                                         {isUpdatingProfile ? "Updating..." : "Update"}
                                     </button>
