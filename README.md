@@ -6,7 +6,7 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 
 ### Lien du projet deployé
 
-https://twitter-clone-3-x2u5.onrender.com/
+https://twitter-clone-1-40dd.onrender.com
 
 ## 🚀 Technologies Utilisées
 
