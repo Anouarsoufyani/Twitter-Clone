@@ -1,4 +1,4 @@
-# Clone de Twitter - Projet d'Apprentissage Fullstack (A Modifier)
+# Clone de Twitter - Projet d'Apprentissage Fullstack
 
 ## 📌 Aperçu du Projet
 
@@ -9,9 +9,10 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 ### Frontend
 - React.js
 - React Router
-- Redux (gestion d'état)
+- Tanstack React Query
 - Tailwind CSS (styling)
-- Axios (requêtes HTTP)
+- Daisy UI
+- React-icons
 
 ### Backend
 - Node.js
@@ -19,13 +20,12 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 - MongoDB (base de données)
 - Mongoose (ODM)
 - JSON Web Token (authentification)
+- Bcrypt
+- Cloudinary
+- Dotenv
+- Cookie-parser
 
 ### Outils de Développement
-- ESLint
-- Prettier
-- Webpack
-- Babel
-- Docker (conteneurisation)
 - Git & GitHub
 
 ## ✨ Fonctionnalités
@@ -34,19 +34,15 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 - Inscription et authentification
 - Création et édition de profil
 - Publication de tweets
-- Like et retweet
-- Suivre/Ne plus suivre des utilisateurs
-
-### Fonctionnalités Avancées
-- Fil d'actualité personnalisé
-- Recherche d'utilisateurs
-- Notifications en temps réel
-- Système de messages directs
+- Commentaires
+- Like et follow
+- Notifications
+- Support des médias dans les tweets
 
 ## 🛠 Installation et Configuration
 
 ### Prérequis
-- Node.js (v16+)
+- Node.js
 - MongoDB
 - npm ou yarn
 
@@ -54,18 +50,18 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 
 1. Cloner le repository
 ```bash
-git clone https://github.com/votre-username/twitter-clone.git
+git clone https://github.com/Anouarsoufyani/Twitter-Clone.git
 cd twitter-clone
 ```
 
 2. Installer les dépendances
 ```bash
 # Frontend
-cd client
+cd Backend
 npm install
 
 # Backend
-cd ../server
+cd Frontend
 npm install
 ```
 
@@ -76,38 +72,25 @@ npm install
 4. Lancer l'application
 ```bash
 # Démarrer le backend
-cd server
 npm run dev
 
 # Dans un autre terminal, démarrer le frontend
-cd client
 npm start
 ```
-
-## 🧪 Tests
-
-### Backend
-- Framework de test : Jest
-- Couverture des tests : API, modèles, authentification
-
-### Frontend
-- React Testing Library
-- Tests de composants et d'intégration
 
 ## 🚧 Roadmap et Améliorations Futures
 
 - [ ] Système de hashtags
 - [ ] Authentification OAuth
-- [ ] Mode sombre
-- [ ] Support des médias dans les tweets
-- [ ] Déploiement sur une plateforme cloud
+- [ ] Mode sombre/clair
+- [ ] Messagerie temps réel
+- [ ] Feed personalisé
 
 ## 📚 Ressources d'Apprentissage
 
 - Documentation React
-- Tutoriels Node.js
-- Cours Udemy sur le développement fullstack
 - Documentation MongoDB
+- https://www.youtube.com/watch?v=MDZC8VDZnV8
 
 ## 🤝 Contribution
 
