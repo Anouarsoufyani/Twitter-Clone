@@ -1,4 +1,4 @@
-# Clone de Twitter - Projet d'Apprentissage Fullstack (A Modifier)
+# Clone de Twitter - Projet d'Apprentissage Fullstack
 
 ## 📌 Aperçu du Projet
 
@@ -9,9 +9,10 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 ### Frontend
 - React.js
 - React Router
-- Redux (gestion d'état)
+- Tanstack React Query
 - Tailwind CSS (styling)
-- Axios (requêtes HTTP)
+- Daisy UI
+- React-icons
 
 ### Backend
 - Node.js
@@ -19,13 +20,12 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 - MongoDB (base de données)
 - Mongoose (ODM)
 - JSON Web Token (authentification)
+- Bcrypt
+- Cloudinary
+- Dotenv
+- Cookie-parser
 
 ### Outils de Développement
-- ESLint
-- Prettier
-- Webpack
-- Babel
-- Docker (conteneurisation)
 - Git & GitHub
 
 ## ✨ Fonctionnalités
@@ -34,19 +34,14 @@ Ce projet est un clone de Twitter développé dans le cadre de mon apprentissage
 - Inscription et authentification
 - Création et édition de profil
 - Publication de tweets
-- Like et retweet
-- Suivre/Ne plus suivre des utilisateurs
-
-### Fonctionnalités Avancées
-- Fil d'actualité personnalisé
-- Recherche d'utilisateurs
-- Notifications en temps réel
-- Système de messages directs
+- Commentaires
+- Like et follow
+- Notifications
 
 ## 🛠 Installation et Configuration
 
 ### Prérequis
-- Node.js (v16+)
+- Node.js
 - MongoDB
 - npm ou yarn
 
