@@ -3,11 +3,12 @@ import { BiRepost } from "react-icons/bi";
 import { FaRegHeart } from "react-icons/fa";
 import { FaRegBookmark } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 const Post = ({ post }) => {
+
 
     const queryClient = useQueryClient();
 
@@ -59,6 +60,46 @@ const Post = ({ post }) => {
         }
     });
 
+    const { mutate: commentPost, isPending: isCommenting } = useMutation({
+        mutationFn: async () => {
+            const res = await fetch(`/api/post/comment/${post._id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ text: comment }),
+            });
+            const data = await res.json();
+            console.log('data', data.data);
+
+
+            if (!res.ok) {
+                throw new Error(data.error || "Something went wrong");
+            }
+            return data.data;
+        },
+        onSuccess: (data) => {
+            toast.success("Comment added successfully");
+            setComment("");
+            // queryClient.invalidateQueries({ queryKey: ["posts"] });
+            queryClient.setQueryData(['posts'], (oldData) => {
+                return oldData.map((p) => {
+                    if (p._id === post._id) {
+                        return {
+                            ...p,
+                            comments: [...data.comments]
+                        };
+                    }
+                    return p;
+                })
+            })
+        },
+        onError: (error) => {
+            toast.error(error.message);
+        }
+    });
+
+
 
     const handleDeletePost = () => {
         deletePost();
@@ -67,6 +108,10 @@ const Post = ({ post }) => {
 
 
     const [comment, setComment] = useState("");
+    useEffect(() => {
+        console.log(comment);
+
+    }, [comment]);
     const postOwner = post.postedBy;
     const isLiked = post.likes.includes(authUser._id);
 
@@ -76,11 +121,11 @@ const Post = ({ post }) => {
 
     const formattedDate = "1h";
 
-    const isCommenting = false;
 
 
     const handlePostComment = (e) => {
         e.preventDefault();
+        commentPost();
     };
 
     const handleLikePost = () => {
