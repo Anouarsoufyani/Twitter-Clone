@@ -114,6 +114,7 @@ export const getSuggestedUsers = async (req, res) => {
 export const updateProfile = async (req, res) => {
     const {fullName, username, email, newPassword, currentPassword, bio, links} = req.body;
     let { profilePic, coverPic} = req.body;
+    
 
     try {
         let profile = await User.findById(req.user._id);
@@ -136,6 +137,8 @@ export const updateProfile = async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             profile.password = await bcrypt.hash(newPassword, salt);
         }
+
+
 
         if(profilePic) {
             if(profile.profilePic) {
