@@ -95,19 +95,28 @@ export const likeUnlikePost = async (req, res) => {
         const isPostLiked = post.likes.includes(userId);
 
         if (isPostLiked) {
-            await Post.findByIdAndUpdate(postId, {
-                $pull: { likes: userId }
-            });
+            // Unlike le post
+            const updatedPost = await Post.findByIdAndUpdate(
+                postId,
+                { $pull: { likes: userId } },
+                { new: true } // Cette option retourne le document mis à jour
+            );
 
             await User.findByIdAndUpdate(userId, {
                 $pull: { likedPosts: postId }
             });
 
-            return res.status(200).json({ success: true, message: 'Post unliked successfully' });
+            
+
+            return res.status(200).json(updatedPost.likes);
+
         } else {
-            await Post.findByIdAndUpdate(postId, {
-                $push: { likes: userId }
-            });
+            // Like le post
+            const updatedPost = await Post.findByIdAndUpdate(
+                postId,
+                { $push: { likes: userId } },
+                { new: true } // Cette option retourne le document mis à jour
+            );
 
             await User.findByIdAndUpdate(userId, {
                 $push: { likedPosts: postId }
@@ -117,16 +126,17 @@ export const likeUnlikePost = async (req, res) => {
                 sender: userId,
                 receiver: post.postedBy,
                 type: 'like',
-            })
+            });
+            await notification.save();
 
-            return res.status(200).json({ success: true, message: 'Post liked successfully' });
+
+            return res.status(200).json(updatedPost.likes);
         }
 
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
 }
-
 export const deletePost = async (req, res) => {
     const { id } = req.params;
 

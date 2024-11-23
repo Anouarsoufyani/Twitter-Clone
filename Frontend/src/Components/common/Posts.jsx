@@ -34,7 +34,6 @@ const Posts = ({ feedType }) => {
         refetch();
     }, [feedType, refetch]);
 
-    console.log("posts", posts);
 
 
 
