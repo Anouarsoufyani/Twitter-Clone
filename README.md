@@ -57,9 +57,11 @@ cd twitter-clone
 2. Installer les dépendances
 ```bash
 # Frontend
+cd Backend
 npm install
 
 # Backend
+cd Frontend
 npm install
 ```
 
