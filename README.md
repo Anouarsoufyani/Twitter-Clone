@@ -82,32 +82,6 @@ npm run dev
 npm start
 ```
 
-## 🚧 Roadmap et Améliorations Futures
-
-- [ ] Système de hashtags
-- [ ] Authentification OAuth
-- [ ] Mode sombre/clair
-- [ ] Messagerie temps réel
-- [ ] Feed personalisé
-
-## 📚 Ressources d'Apprentissage
-
-- Documentation React
-- Documentation MongoDB
-- https://www.youtube.com/watch?v=MDZC8VDZnV8
-
-## 🤝 Contribution
-
-Les contributions sont les bienvenues ! Merci de suivre ces étapes :
-1. Fork du projet
-2. Créer une branche de fonctionnalité
-3. Commit de vos modifications
-4. Push et ouvrir une Pull Request
-
-## 📄 Licence
-
-[Choisir une licence open-source appropriée, par exemple MIT]
-
 ## 👨‍💻 Contact
 
 Votre nom - votre-email@example.com
